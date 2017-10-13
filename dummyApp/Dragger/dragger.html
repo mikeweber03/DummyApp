@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="animation.js"></script>
+    <script>
+        function loader() {
+            var wt1 = new wholeThing();
+            var config = {};
+            config.startPressure = 1.0;
+
+            config.startVolume = 22.0;
+            config.volMaxLiter = 45.0;
+            config.volumeMax = 170;
+            config.volumeMin = 10;
+            config.volumeX = 83;
+            config.volumeWidth = 131;
+
+            config.needle1X = 43;
+            config.needle1Y = 120;
+            config.parentObject = document.getElementById('canvas1');
+            config.type = "boyle";
+
+            config.startTemperature = 303.15;
+            config.tempMaxK = 400;
+            config.temperMax = 155;
+            config.temperMin = 65;
+            config.temperX = 246;
+            config.temperWidth = 14;
+
+            wt1.init(config);
+
+            var wt2 = new wholeThing();
+            var config2 = {};
+            config2.startPressure = 1.0;
+
+            config2.startTemperature = 303.15;
+            config2.tempMaxK = 400;
+            config2.temperMax = 155;
+            config2.temperMin = 65;
+            config2.temperX = 246;
+            config2.temperWidth = 14;
+
+            config2.startVolume = 22.0;
+            config2.volMaxLiter = 45.0;
+            config2.volumeMax = 170;
+            config2.volumeMin = 10;
+            config2.volumeX = 83;
+            config2.volumeWidth = 131;
+
+            config2.needle1X = 43;
+            config2.needle1Y = 120;
+            config2.parentObject = document.getElementById('canvas2');
+            config2.type = "charles";
+            wt2.init(config2);
+        }
+    </script>
+</head>
+    <body onLoad='loader();'>
+        <br /><br />
+        <div>
+            <span style="font-size:14pt; font-weight:bold">Boyle's Law</span>
+            <image src="image/volume.png" style="position:fixed; width:300px; top:80px">
+            </image>
+            <canvas id="canvas1" width="300" height="219" style="position:fixed; top:80px">
+                This text is displayed if your browser does not support HTML5 Canvas.
+            </canvas>
+        </div>
+        <div style="position :fixed; left:600px;">
+            <span style="font-size:14pt; font-weight:bold">Charles' Law</span>
+            <image src="image/volume.png" style="position:fixed; width:300px; left:600px; top:80px;">
+            </image>
+            <canvas id="canvas2" width="300" height="219" style="position:fixed; left:600px; top:80px">
+                This text is displayed if your browser does not support HTML5 Canvas.
+            </canvas>
+</div>
+    </body>
+</html>
