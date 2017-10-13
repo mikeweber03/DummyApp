@@ -48,6 +48,9 @@
         if (this.type == 'charles') {
             this.k = this.volume / this.temperature;
         }
+        if (this.type == 'gaylussac') {
+            this.k = this.pressure / this.temperature;
+        }
 
         this.ctx = this.canvas.getContext('2d');
         // This complicates things a little but but fixes mouse co-ordinate problems
@@ -124,7 +127,7 @@
                 }
             }
             //See if we're dragging the temperature
-            if (myState.type == 'charles') {
+            if (myState.type == 'charles' || myState.type == 'gaylussac') {
                 if (myState.temperShape.contains(mx, my)) {
                     myState.dragoffx = mx - myState.temperShape.x;
                     myState.dragoffy = my - myState.temperShape.y;
@@ -181,10 +184,15 @@
                 myState.temperature = 200 * _tPct + 200;
 
                 //Math specific to Charles' Law
-                myState.volume = myState.k * myState.temperature;
-                //Adjust the volume based on the temperature
-                myState.volShape.y = (((myState.volMaxLiter - myState.volume) / config.volMaxLiter) * config.volumeMax) + myState.volShape.h;
-
+                if (myState.type == 'charles') {
+                    myState.volume = myState.k * myState.temperature;
+                    //Adjust the volume based on the temperature
+                    myState.volShape.y = (((myState.volMaxLiter - myState.volume) / config.volMaxLiter) * config.volumeMax) + myState.volShape.h;
+                }
+                //Math specific to Gay-Lussac's Law'
+                else {
+                    myState.pressure = myState.k * myState.temperature;
+                }
 
                 myState.valid = false; // Something's dragging so we must redraw
             }
@@ -213,6 +221,9 @@
             var ctx = this.ctx;
             this.clear();
             var _maxPressure = 4.5; //atm
+            if (this.type == 'gaylussac') {
+                _maxPressure = 2.0; //atm
+            }
             if (this.needle1 && this.needle1.src) {
                 ctx.translate(this.needle1.X, this.needle1.Y); // change origin
                 var _pct = (_maxPressure - this.pressure) / _maxPressure;
@@ -300,7 +311,7 @@
         //Take the high temperature (400k) and subtract the start temperature, then divide by the total gap (400k - 200k)
         var _tPct = (config.tempMaxK - config.startTemperature) / 200;
         var _tGap = (config.temperMax - config.temperMin) * _tPct;
-        var _colorT = config.type == 'charles' ? '#aa00ff' : '#444444';
+        var _colorT = (config.type == 'charles' || config.type == 'gaylussac') ? '#aa00ff' : '#444444';
         s.temperShape = new Shape(config.temperX, config.temperMin + _tGap , config.temperWidth, 20, _colorT);
 
         s.valid = false;
