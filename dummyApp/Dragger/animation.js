@@ -39,7 +39,8 @@
         this.temperature = config.startTemperature;
         this.tempMaxK = config.tempMaxK;
        this.temperMax= config.temperMax;
-        this.temperMin=config.temperMin;
+       this.temperMin = config.temperMin;
+       this.collisions = config.collisions;
 
 
         if (this.type == 'boyle') {
@@ -216,10 +217,14 @@
     // While draw is called as often as the INTERVAL variable demands,
     // It only ever does something if the canvas gets invalidated by our code
     CanvasState.prototype.draw = function () {
+        if (this.collisions) {
+            this.collisions.draw();
+        }
         // if our state is invalid, redraw and validate!
         if (!this.valid) {
             var ctx = this.ctx;
-            this.clear();
+            this.clear();          
+
             var _maxPressure = 4.5; //atm
             if (this.type == 'gaylussac') {
                 _maxPressure = 2.0; //atm
