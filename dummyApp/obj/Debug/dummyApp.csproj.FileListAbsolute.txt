@@ -22,3 +22,9 @@ D:\VSProjects\dummyApp\dummyApp\bin\dummyApp.pdb
 D:\VSProjects\dummyApp\dummyApp\obj\Debug\dummyApp.csprojResolveAssemblyReference.cache
 D:\VSProjects\dummyApp\dummyApp\obj\Debug\dummyApp.dll
 D:\VSProjects\dummyApp\dummyApp\obj\Debug\dummyApp.pdb
+D:\VSProjects\dummyApp\DummyApp\dummyApp\bin\dummyApp.dll.config
+D:\VSProjects\dummyApp\DummyApp\dummyApp\bin\dummyApp.dll
+D:\VSProjects\dummyApp\DummyApp\dummyApp\bin\dummyApp.pdb
+D:\VSProjects\dummyApp\DummyApp\dummyApp\obj\Debug\dummyApp.csprojResolveAssemblyReference.cache
+D:\VSProjects\dummyApp\DummyApp\dummyApp\obj\Debug\dummyApp.dll
+D:\VSProjects\dummyApp\DummyApp\dummyApp\obj\Debug\dummyApp.pdb

@@ -35,12 +35,15 @@
         this.pressure = config.startPressure;
         this.volumeMax = config.volumeMax;
         this.volumeMin = config.volumeMin;
+        this.volumeX = config.volumeX;
+        this.volumeWidth = config.volumeWidth;
+
         this.volMaxLiter = config.volMaxLiter;
         this.temperature = config.startTemperature;
         this.tempMaxK = config.tempMaxK;
-       this.temperMax= config.temperMax;
-       this.temperMin = config.temperMin;
-       this.collisions = config.collisions;
+        this.temperMax= config.temperMax;
+        this.temperMin = config.temperMin;
+        this.collisions = config.collisions;
 
 
         if (this.type == 'boyle') {
@@ -150,16 +153,18 @@
                 if (myState.volShape.y < myState.volumeMin) {
                     myState.volShape.y = myState.volumeMin;
                 }
-                if (myState.volShape.y > myState.volumeMax) {
-                    myState.volShape.y = myState.volumeMax;
+                if (myState.volShape.y > myState.volumeMax - 40) {
+                    myState.volShape.y = myState.volumeMax - 40;
                 }
 
                 //The max volume is 45.0L
-                var _totalVol = myState.volumeMax;
-                myState.volume = ((_totalVol - myState.volShape.y + myState.volShape.h) / (_totalVol) * myState.volMaxLiter);
+                
+                myState.volume = ((myState.volumeMax - myState.volShape.y + myState.volShape.h) / myState.volumeMax) * myState.volMaxLiter;
 
                 //Math specific to Boyle's Law
                 myState.pressure = myState.k / myState.volume;
+
+                //updateCollisionArea(myState);
 
                 myState.valid = false; // Something's dragging so we must redraw
             }
@@ -189,6 +194,8 @@
                     myState.volume = myState.k * myState.temperature;
                     //Adjust the volume based on the temperature
                     myState.volShape.y = (((myState.volMaxLiter - myState.volume) / config.volMaxLiter) * config.volumeMax) + myState.volShape.h;
+
+                    //updateCollisionArea(myState);
                 }
                 //Math specific to Gay-Lussac's Law'
                 else {
@@ -199,6 +206,9 @@
             }
         }
         function _mouseUp(e) {
+            if (myState.collisions) {
+                updateCollisionArea(myState);
+            }
             myState.volDragging = false;
             myState.temperDragging = false;
             myState.valid = false;
@@ -217,9 +227,6 @@
     // While draw is called as often as the INTERVAL variable demands,
     // It only ever does something if the canvas gets invalidated by our code
     CanvasState.prototype.draw = function () {
-        if (this.collisions) {
-            this.collisions.draw();
-        }
         // if our state is invalid, redraw and validate!
         if (!this.valid) {
             var ctx = this.ctx;
@@ -266,6 +273,12 @@
 
             this.valid = true;
         }
+        else {
+            if (this.collisions) {
+                this.collisions.draw();
+            }
+
+        }
     }
 
 
@@ -308,9 +321,11 @@
        
         //Set the volShape
         //Take 100L minus the start volume times the 100L to get a percent of the original
-        var _vol = ((config.volMaxLiter - config.startVolume) / config.volMaxLiter) * config.volumeMax;
+        var _vPct = (config.volMaxLiter - config.startVolume) / config.volMaxLiter;
+        //var _vol = ((config.volMaxLiter - config.startVolume) / config.volMaxLiter) * config.volumeMax;
+        var _vol = config.volumeMax * _vPct;
         var _color = config.type == 'boyle' ? '#aa00ff' : '#444444';
-        s.volShape = new Shape(config.volumeX, _vol + 20, config.volumeWidth, 20, _color);
+        s.volShape = new Shape(config.volumeX, config.volumeMax -_vol + 20, config.volumeWidth, 20, _color);
 
         //Set the temperShape
         //Take the high temperature (400k) and subtract the start temperature, then divide by the total gap (400k - 200k)
@@ -319,7 +334,21 @@
         var _colorT = (config.type == 'charles' || config.type == 'gaylussac') ? '#aa00ff' : '#444444';
         s.temperShape = new Shape(config.temperX, config.temperMin + _tGap , config.temperWidth, 20, _colorT);
 
+        updateCollisionArea(s);
         s.valid = false;
+    }
+
+    function updateCollisionArea(myState) {
+        //change the collision area
+        if (myState.collisions) {
+            var _cfg = {};
+            _cfg.x = myState.volShape.x;
+            _cfg.y = myState.volShape.y + myState.volShape.h;
+            _cfg.width = myState.volShape.w;
+            _cfg.height = myState.volumeMax - myState.volShape.y;
+            _cfg.velocity = 4.0;
+            myState.collisions.update(_cfg);
+        }
     }
 
 };

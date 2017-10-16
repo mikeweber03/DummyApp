@@ -21,21 +21,34 @@ mwApp.collisions = (function () {
         //container = document.getElementById("can1");
         //context = container.getContext('2d');
 
-        balls = [   {dx: 4, dy: 4, r: 3, y: 100, x: 10, color: "#0000ff", mass:1},
-                    {dx: 8, dy: 8, r: 3, y: 100, x: 100,color: "#00ff00", mass:1},
-                    { dx: 8, dy: 8, r: 3, y: 50, x: 50, color: "#00ffff", mass: 1 },
-                    { dx: 8, dy: 8, r: 3, y: 45, x: 30, color: "#ffff00", mass: 1 },
-                    { dx: 8, dy: 8, r: 3, y: 100, x: 50, color: "#ff00ff", mass: 1 },
+        balls = [   {dx: 4, dy: 4, r: 3, y: y + 10, x: x + 30, color: "#0000ff", mass:1},
+                    {dx: 4, dy: 4, r: 3, y: y + 100, x: x + 100,color: "#00ff00", mass:1},
+                    { dx: 3, dy: 5, r: 3, y: y + 50, x: x + 50, color: "#00ffff", mass: 1 },
+                    { dx: 4, dy: 4, r: 3, y: y + 45, x: x+30, color: "#ffff00", mass: 1 },
+                    { dx: 7, dy: 1, r: 3, y: y +75, x: x+55, color: "#ff00ff", mass: 1 },
+                    { dx: 4, dy: 4, r: 3, y: y + 90, x: x + 90, color: "#00ff00", mass: 1 },
+                    { dx: 3, dy: 5, r: 3, y: y + 0, x: x + 50, color: "#00ffff", mass: 1 },
+                    { dx: 4, dy: 4, r: 3, y: y + 45, x: x + 0, color: "#ffff00", mass: 1 },
+                    { dx: 7, dy: 1, r: 3, y: y + 105, x: x + 80, color: "#ff00ff", mass: 1 },
+                    { dx: 7, dy: 1, r: 3, y: y + 5, x: x + 20, color: "#ff00ff", mass: 1 }
         ];
 
        // setInterval(draw, 100);
     }
 
+    function update(config) {
+        width = config.width;
+        height = config.height;
+        x = config.x;
+        y = config.y;
+        for (var i = 0; i < balls.length; i++) {
+            balls[i].dx = config.velocity;
+            balls[i].dy = config.velocity;
+        }
+    }
+
  
     function draw() {
-        //var width = container.width;
-        //var height = container.height;
-
         context.clearRect(x, y, width, height);
 
         for (var i = 0; i < balls.length; i++) {
@@ -52,10 +65,39 @@ mwApp.collisions = (function () {
     }
 
     function updatePosition(ball) {
-        if (ball.x - ball.r / 2 < x || ball.x + ball.r/2 > width + x)
-            ball.dx = -ball.dx;
-        if (ball.y - ball.r/2 < y || ball.y + ball.r/2 > height + y)
-            ball.dy = -ball.dy;
+        //if (ball.x - ball.r / 2 < x || ball.x + ball.r/2 > width + x)
+        //    ball.dx = -ball.dx;
+        //if (ball.y - ball.r/2 < y || ball.y + ball.r/2 > height + y)
+        //    ball.dy = -ball.dy;
+
+        //X
+        if (ball.dx < 0) {
+            if (ball.x + ball.dx - ball.r < x) {
+                ball.x = x + ball.r;
+                ball.dx = -ball.dx;
+            }
+        }
+        else {
+            if (ball.x + ball.dx + ball.r > width + x) {
+                ball.x = x + width - ball.r ;
+                ball.dx = -ball.dx;
+            }
+        }
+
+        //Y
+        if (ball.dy < 0) {
+            if (ball.y + ball.dy - ball.r < y) {
+                ball.y = y + ball.r;
+                ball.dy = -ball.dy;
+            }
+        }
+        else {
+            if (ball.y + ball.dy + ball.r > height + y) {
+                ball.y = y + height - ball.r;
+                ball.dy = -ball.dy;
+            }
+        }
+
         ball.x += ball.dx;
         ball.y += ball.dy;
         context.beginPath();
@@ -109,6 +151,7 @@ mwApp.collisions = (function () {
     
     return {
         init: init,
+        update:update,
         draw: draw
     };
 })();
