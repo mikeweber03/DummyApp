@@ -62,7 +62,7 @@
   <ItemGroup>
     <Content Include="Dragger\animation.js" />
     <Content Include="Dragger\background.js" />
-    <Content Include="Dragger\collisions.js" />
+    <Content Include="Dragger\particles.js" />
     <Content Include="Dragger\dragger.html" />
     <Content Include="Dragger\dragger.js" />
     <Content Include="Dragger\image\needle.png" />

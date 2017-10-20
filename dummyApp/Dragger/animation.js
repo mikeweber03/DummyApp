@@ -43,7 +43,8 @@
         this.tempMaxK = config.tempMaxK;
         this.temperMax= config.temperMax;
         this.temperMin = config.temperMin;
-        this.collisions = config.collisions;
+        this.speed = 1.0;
+        this.particles = config._particles;
 
 
         if (this.type == 'boyle') {
@@ -194,7 +195,9 @@
                     myState.volume = myState.k * myState.temperature;
                     //Adjust the volume based on the temperature
                     myState.volShape.y = (((myState.volMaxLiter - myState.volume) / config.volMaxLiter) * config.volumeMax) + myState.volShape.h;
-
+                    //Get the pct to adjust speed
+                    var _pctTemp = (myState.temperature - 100) / (myState.tempMaxK - 100);
+                    myState.speed = _pctTemp * 2;
                     //updateCollisionArea(myState);
                 }
                 //Math specific to Gay-Lussac's Law'
@@ -206,7 +209,7 @@
             }
         }
         function _mouseUp(e) {
-            if (myState.collisions) {
+            if (myState.particles) {
                 updateCollisionArea(myState);
             }
             myState.volDragging = false;
@@ -274,8 +277,8 @@
             this.valid = true;
         }
         else {
-            if (this.collisions) {
-                this.collisions.draw();
+            if (this.particles) {
+                this.particles.draw();
             }
 
         }
@@ -340,14 +343,14 @@
 
     function updateCollisionArea(myState) {
         //change the collision area
-        if (myState.collisions) {
+        if (myState.particles) {
             var _cfg = {};
             _cfg.x = myState.volShape.x;
             _cfg.y = myState.volShape.y + myState.volShape.h;
             _cfg.width = myState.volShape.w;
             _cfg.height = myState.volumeMax - myState.volShape.y;
-            _cfg.velocity = 4.0;
-            myState.collisions.update(_cfg);
+            _cfg.speed = myState.speed;
+            myState.particles.update(_cfg);
         }
     }
 
