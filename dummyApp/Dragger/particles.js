@@ -1,55 +1,38 @@
 ﻿function Particles () {
-    var context;
-    var width;
-    var height;
-    var x;
-    var y;
-    var speed;
-    //var container;
-
-    var balls = [];
+  
+    //var _balls;
     
     Particles.prototype.init = function (config) {
+        //_balls = new Array();
 
-        context = config.context;
-        width = config.width;
-        height = config.height;
-        x = config.x;
-        y = config.y;
-        speed = config.speed;
-
-        //container = document.getElementById("can1");
-        //context = container.getContext('2d');
-
-        balls = [   {dx: 4, dy: 4, r: 3, y: y + 10, x: x + 30, color: "#0000ff", mass:1},
-                    {dx: 4, dy: 4, r: 3, y: y + 100, x: x + 100,color: "#00ff00", mass:1},
-                    { dx: 3, dy: 5, r: 3, y: y + 50, x: x + 50, color: "#00ffff", mass: 1 },
-                    { dx: 4, dy: 4, r: 3, y: y + 45, x: x+30, color: "#ffff00", mass: 1 },
-                    { dx: 7, dy: 1, r: 3, y: y +75, x: x+55, color: "#ff00ff", mass: 1 },
-                    { dx: 4, dy: 4, r: 3, y: y + 90, x: x + 90, color: "#00ff00", mass: 1 },
-                    { dx: 3, dy: 5, r: 3, y: y + 0, x: x + 50, color: "#00ffff", mass: 1 },
-                    { dx: 4, dy: 4, r: 3, y: y + 45, x: x + 0, color: "#ffff00", mass: 1 },
-                    { dx: 7, dy: 1, r: 3, y: y + 105, x: x + 80, color: "#ff00ff", mass: 1 },
-                    { dx: 7, dy: 1, r: 3, y: y + 5, x: x + 20, color: "#ff00ff", mass: 1 }
-        ];
-
-       // setInterval(draw, 100);
+        //_balls = [{ dx: 4, dy: 4, r: 3, y: config.y + 10, x: config.x + 30, color: "#0000ff", mass: 1 },
+        //            { dx: 4, dy: 4, r: 3, y: config.y + 100, x: config.x + 100, color: "#00ff00", mass: 1 },
+        //            { dx: 3, dy: 5, r: 3, y: config.y + 50, x: config.x + 50, color: "#00ffff", mass: 1 },
+        //            { dx: 4, dy: 4, r: 3, y: config.y + 45, x: config.x + 30, color: "#ffff00", mass: 1 },
+        //            { dx: 7, dy: 1, r: 3, y: config.y + 75, x: config.x + 55, color: "#ff00ff", mass: 1 },
+        //            { dx: 4, dy: 4, r: 3, y: config.y + 90, x: config.x + 90, color: "#00ff00", mass: 1 },
+        //            { dx: 3, dy: 5, r: 3, y: config.y + 0, x: config.x + 50, color: "#00ffff", mass: 1 },
+        //            { dx: 4, dy: 4, r: 3, y: config.y + 45, x: config.x + 0, color: "#ffff00", mass: 1 },
+        //            { dx: 7, dy: 1, r: 3, y: config.y + 105, x: config.x + 80, color: "#ff00ff", mass: 1 },
+        //            { dx: 7, dy: 1, r: 3, y: config.y + 5, x: config.x + 20, color: "#ff00ff", mass: 1 }
+        //];
     }
 
-    Particles.prototype.update = function (config) {
-        width = config.width;
-        height = config.height;
-        x = config.x;
-        y = config.y;
-        speed = config.speed;
-    }
+    //Particles.prototype.update = function (config) {
+    //    width = config.width;
+    //    height = config.height;
+    //    x = config.x;
+    //    y = config.y;
+    //    speed = config.speed;
+    //}
+  
+    Particles.prototype.draw = function (cfg, balls) {
+        cfg.context.clearRect(cfg.x, cfg.y, cfg.width, cfg.height);
 
- 
-    Particles.prototype.draw = function () {
-        context.clearRect(x, y, width, height);
+        //var balls = this.getBalls();
 
         for (var i = 0; i < balls.length; i++) {
-            updatePosition(balls[i]);
+            updatePosition(balls[i], cfg);
         }
 
         for (var a = 0; a < balls.length; a++) {
@@ -61,47 +44,47 @@
         }
     }
 
-    function updatePosition(ball) {
-        if (ball.x + ball.dx * speed - ball.r < x) {
-                ball.x = x + ball.r;
+    function updatePosition(ball, cfg) {
+        if (ball.x + ball.dx * cfg.speed - ball.r < cfg.x) {
+                ball.x = cfg.x + ball.r;
                 if (ball.dx < 0) {
                     ball.dx = -ball.dx;
             }
         }
         else {
-            if (ball.x + ball.dx * speed + ball.r > width + x) {
-                ball.x = x + width - ball.r ;
+            if (ball.x + ball.dx * cfg.speed + ball.r > cfg.width + cfg.x) {
+                ball.x = cfg.x + cfg.width - ball.r;
                 ball.dx = -ball.dx;
             }
         }
 
         //Y
-            if (ball.y + ball.dy * speed - ball.r < y) {
-                ball.y = y + ball.r;
+            if (ball.y + ball.dy * cfg.speed - ball.r < cfg.y) {
+                ball.y = cfg.y + ball.r;
                 if (ball.dy < 0) {
                     ball.dy = -ball.dy;
             }
         }
         else {
-            if (ball.y + ball.dy * speed + ball.r > height + y) {
-                ball.y = y + height - ball.r;
+            if (ball.y + ball.dy * cfg.speed + ball.r > cfg.height + cfg.y) {
+                ball.y = cfg.y + cfg.height - ball.r;
                 ball.dy = -ball.dy;
             }
         }
 
-        ball.x += ball.dx * speed;
-        ball.y += ball.dy * speed;
-        context.beginPath();
-        context.fillStyle = ball.color;
-        context.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2, true);
-        context.closePath();
-        context.fill();
+        ball.x += ball.dx * cfg.speed;
+        ball.y += ball.dy * cfg.speed;
+        cfg.context.beginPath();
+        cfg.context.fillStyle = ball.color;
+        cfg.context.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2, true);
+        cfg.context.closePath();
+        cfg.context.fill();
 
-        context.beginPath();
-        context.fillStyle = "#000000";
-        context.arc(ball.x, ball.y, 2, 0, Math.PI * 2, true);
-        context.closePath();
-        context.fill();
+        cfg.context.beginPath();
+        cfg.context.fillStyle = "#000000";
+        cfg.context.arc(ball.x, ball.y, 2, 0, Math.PI * 2, true);
+        cfg.context.closePath();
+        cfg.context.fill();
 
     }
 

@@ -7,6 +7,14 @@
     <script src="particles.js"></script>
     <script>
         function loader() {
+            var _cfg = {};
+            _cfg.context = document.getElementById('canvas1').getContext('2d');
+            _cfg.width = 131;
+            _cfg.height = 100;
+            _cfg.x = 83;
+            _cfg.y = 100;
+            _cfg.speed = 1.0;
+
             var wt1 = new wholeThing();
             var config = {};
             config.startPressure = 1.0;
@@ -29,18 +37,16 @@
             config.needle1Y = 120;
             config.parentObject = document.getElementById('canvas1');
             config.type = "boyle";
-            var _cfg = {};
-            _cfg.context = config.parentObject.getContext('2d');
-            _cfg.width = 131;
-            _cfg.height = 100;
-            _cfg.x = 83;
-            _cfg.y = 100;
-            _cfg.speed = 1.0;
-            //var _col1 = new Particles();
-            //_col1.init(_cfg);
-            //config.Particles = _col1;
+            config._particleConfig = _cfg;
             wt1.init(config);
 
+            var _cfg2 = {};
+            _cfg2.context = document.getElementById('canvas2').getContext('2d');
+            _cfg2.width = 131;
+            _cfg2.height = 100;
+            _cfg2.x = 83;
+            _cfg2.y = 100;
+            _cfg2.speed = 1.0;
 
             var wt2 = new wholeThing();
             var config2 = {};
@@ -64,19 +70,16 @@
             config2.needle1Y = 120;
             config2.parentObject = document.getElementById('canvas2');
             config2.type = "charles";
-
-            var _cfg2 = {};
-            _cfg2.context = config2.parentObject.getContext('2d');
-            _cfg2.width = 131;
-            _cfg2.height = 100;
-            _cfg2.x = 83;
-            _cfg2.y = 100;
-            _cfg2.speed = 1.0;
-            var _col2 = new Particles();
-            config2._particles = _col2;
+            config2._particleConfig = _cfg2;
             wt2.init(config2);
-            _col2.init(_cfg2);
 
+            var _cfg3 = {};
+            _cfg3.context = document.getElementById('canvas3').getContext('2d');
+            _cfg3.width = 131;
+            _cfg3.height = 100;
+            _cfg3.x = 83;
+            _cfg3.y = 100;
+            _cfg3.speed = 1.0;
 
             var wt3 = new wholeThing();
             var config3 = {};
@@ -100,16 +103,8 @@
             config3.needle1Y = 120;
             config3.parentObject = document.getElementById('canvas3');
             config3.type = "gaylussac";
+            config3._particleConfig = _cfg3;
 
-            var _cfg3 = {};
-            _cfg3.context = config3.parentObject.getContext('2d');
-            _cfg3.width = 131;
-            _cfg3.height = 100;
-            _cfg3.x = 83;
-            _cfg3.y = 100;
-            _cfg3.speed = 1.0;
-             config3._particles = new Particles();
-             config3._particles.init(_cfg3);
             wt3.init(config3);                    
         }
     </script>

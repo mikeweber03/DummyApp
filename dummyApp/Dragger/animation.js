@@ -1,30 +1,10 @@
 ﻿function wholeThing() {
-    function Shape(x, y, w, h, fill) {
-        // This is a very simple and unsafe constructor. All we're doing is checking if the values exist.
-        // "x || 0" just means "if there is a value for x, use that. Otherwise use 0."
-        // But we aren't checking anything else! We could put "Lalala" for the value of x 
-        this.x = x || 0;
-        this.y = y || 0;
-        this.w = w || 1;
-        this.h = h || 1;
-        this.fill = fill || '#AAAAAA';
-    }
-
-    // Draws this shape to a given context
-    Shape.prototype.draw = function (ctx) {
-        ctx.fillStyle = this.fill;
-        ctx.fillRect(this.x, this.y, this.w, this.h);
-    }
-
-    // Determine if a point is inside the shape's bounds
-    Shape.prototype.contains = function (mx, my) {
-        // All we have to do is make sure the Mouse X,Y fall in the area between
-        // the shape's X and (X + Width) and its Y and (Y + Height)
-        return (this.x <= mx) && (this.x + this.w >= mx) &&
-                (this.y <= my) && (this.y + this.h >= my);
-    }
+ 
 
     function CanvasState(config) {
+        this._balls = new Array();
+
+
         // **** First some setup! ****
         this.canvas = config.parentObject;
         this.type = config.type;
@@ -43,9 +23,9 @@
         this.tempMaxK = config.tempMaxK;
         this.temperMax= config.temperMax;
         this.temperMin = config.temperMin;
-        this.speed = 1.0;
-        this.particles = config._particles;
-
+        this.speed = 0.5;
+        this.particles = new Particles();
+        this.particles.init(config._particleConfig);
 
         if (this.type == 'boyle') {
             this.k = this.volume * this.pressure;
@@ -72,6 +52,22 @@
         var html = document.body.parentNode;
         this.htmlTop = html.offsetTop;
         this.htmlLeft = html.offsetLeft;
+
+
+        this._balls = [
+            { dx: 4, dy: 4, r: 3, y: config._particleConfig.y + 10, x: config._particleConfig.x + 30, color: "#0000ff", mass: 1 },
+            { dx: 4, dy: 4, r: 3, y: config._particleConfig.y + 100, x: config._particleConfig.x + 100, color: "#00ff00", mass: 1 },
+            { dx: 3, dy: 5, r: 3, y: config._particleConfig.y + 50, x: config._particleConfig.x + 50, color: "#00ffff", mass: 1 },
+            { dx: 4, dy: 4, r: 3, y: config._particleConfig.y + 45, x: config._particleConfig.x + 30, color: "#ffff00", mass: 1 },
+            { dx: 7, dy: 1, r: 3, y: config._particleConfig.y + 75, x: config._particleConfig.x + 55, color: "#ff00ff", mass: 1 },
+            { dx: 4, dy: 4, r: 3, y: config._particleConfig.y + 90, x: config._particleConfig.x + 90, color: "#00ff00", mass: 1 },
+            { dx: 3, dy: 5, r: 3, y: config._particleConfig.y + 0, x: config._particleConfig.x + 50, color: "#00ffff", mass: 1 },
+            { dx: 4, dy: 4, r: 3, y: config._particleConfig.y + 45, x: config._particleConfig.x + 0, color: "#ffff00", mass: 1 },
+            { dx: 7, dy: 1, r: 3, y: config._particleConfig.y + 105, x: config._particleConfig.x + 80, color: "#ff00ff", mass: 1 },
+            { dx: 7, dy: 1, r: 3, y: config._particleConfig.y + 5, x: config._particleConfig.x + 20, color: "#ff00ff", mass: 1 }
+        ];
+
+
 
       
         this.valid = false; // when set to false, the canvas will redraw everything
@@ -154,8 +150,8 @@
                 if (myState.volShape.y < myState.volumeMin) {
                     myState.volShape.y = myState.volumeMin;
                 }
-                if (myState.volShape.y > myState.volumeMax - 40) {
-                    myState.volShape.y = myState.volumeMax - 40;
+                if (myState.volShape.y > myState.volumeMax - 30) {
+                    myState.volShape.y = myState.volumeMax - 30;
                 }
 
                 //The max volume is 45.0L
@@ -164,8 +160,6 @@
 
                 //Math specific to Boyle's Law
                 myState.pressure = myState.k / myState.volume;
-
-                //updateCollisionArea(myState);
 
                 myState.valid = false; // Something's dragging so we must redraw
             }
@@ -195,23 +189,26 @@
                     myState.volume = myState.k * myState.temperature;
                     //Adjust the volume based on the temperature
                     myState.volShape.y = (((myState.volMaxLiter - myState.volume) / config.volMaxLiter) * config.volumeMax) + myState.volShape.h;
-                    //Get the pct to adjust speed
-                    var _pctTemp = (myState.temperature - 100) / (myState.tempMaxK - 100);
-                    myState.speed = _pctTemp * 2;
-                    //updateCollisionArea(myState);
                 }
                 //Math specific to Gay-Lussac's Law'
                 else {
                     myState.pressure = myState.k * myState.temperature;
                 }
 
+                if (myState.type == "charles" || myState.type == "gaylussac") {
+                    //Get the pct to adjust speed
+                    var _pctTemp = (myState.temperature - 175) / (myState.tempMaxK - 175);
+                    myState.speed = _pctTemp * 1.5;
+                }
+
+
                 myState.valid = false; // Something's dragging so we must redraw
             }
         }
         function _mouseUp(e) {
-            if (myState.particles) {
-                updateCollisionArea(myState);
-            }
+            //if (myState.particles) {
+            //    updateCollisionArea(myState);
+            //}
             myState.volDragging = false;
             myState.temperDragging = false;
             myState.valid = false;
@@ -231,8 +228,8 @@
     // It only ever does something if the canvas gets invalidated by our code
     CanvasState.prototype.draw = function () {
         // if our state is invalid, redraw and validate!
+        var ctx = this.ctx;
         if (!this.valid) {
-            var ctx = this.ctx;
             this.clear();          
 
             var _maxPressure = 4.5; //atm
@@ -278,7 +275,14 @@
         }
         else {
             if (this.particles) {
-                this.particles.draw();
+                var _cfg = {};
+                _cfg.x = this.volShape.x;
+                _cfg.y = this.volShape.y + this.volShape.h;
+                _cfg.width = this.volShape.w;
+                _cfg.height = this.volumeMax - this.volShape.y;
+                _cfg.speed = this.speed;
+                _cfg.context = ctx;
+                this.particles.draw(_cfg, this._balls);
             }
 
         }
@@ -337,21 +341,34 @@
         var _colorT = (config.type == 'charles' || config.type == 'gaylussac') ? '#aa00ff' : '#444444';
         s.temperShape = new Shape(config.temperX, config.temperMin + _tGap , config.temperWidth, 20, _colorT);
 
-        updateCollisionArea(s);
+        //updateCollisionArea(s);
         s.valid = false;
     }
 
-    function updateCollisionArea(myState) {
-        //change the collision area
-        if (myState.particles) {
-            var _cfg = {};
-            _cfg.x = myState.volShape.x;
-            _cfg.y = myState.volShape.y + myState.volShape.h;
-            _cfg.width = myState.volShape.w;
-            _cfg.height = myState.volumeMax - myState.volShape.y;
-            _cfg.speed = myState.speed;
-            myState.particles.update(_cfg);
-        }
+    function Shape(x, y, w, h, fill) {
+        // This is a very simple and unsafe constructor. All we're doing is checking if the values exist.
+        // "x || 0" just means "if there is a value for x, use that. Otherwise use 0."
+        // But we aren't checking anything else! We could put "Lalala" for the value of x 
+        this.x = x || 0;
+        this.y = y || 0;
+        this.w = w || 1;
+        this.h = h || 1;
+        this.fill = fill || '#AAAAAA';
     }
+
+    // Draws this shape to a given context
+    Shape.prototype.draw = function (ctx) {
+        ctx.fillStyle = this.fill;
+        ctx.fillRect(this.x, this.y, this.w, this.h);
+    }
+
+    // Determine if a point is inside the shape's bounds
+    Shape.prototype.contains = function (mx, my) {
+        // All we have to do is make sure the Mouse X,Y fall in the area between
+        // the shape's X and (X + Width) and its Y and (Y + Height)
+        return (this.x <= mx) && (this.x + this.w >= mx) &&
+                (this.y <= my) && (this.y + this.h >= my);
+    }
+  
 
 };
