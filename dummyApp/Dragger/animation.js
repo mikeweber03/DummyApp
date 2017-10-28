@@ -23,6 +23,8 @@
         this.tempMaxK = config.tempMaxK;
         this.temperMax= config.temperMax;
         this.temperMin = config.temperMin;
+        this.maxPressure = config.maxPressure;
+
         this.speed = 0.5;
         this.particles = new Particles();
         this.particles.init(config._particleConfig);
@@ -35,6 +37,10 @@
         }
         if (this.type == 'gaylussac') {
             this.k = this.pressure / this.temperature;
+        }
+        if (this.type == 'avagadro') {
+            //We'll multiply this by changed mole numbers
+            this.k = this.pressure ;
         }
 
         this.ctx = this.canvas.getContext('2d');
@@ -53,7 +59,7 @@
         this.htmlTop = html.offsetTop;
         this.htmlLeft = html.offsetLeft;
 
-
+        this._ballLength = 10;
         this._balls = [
             { dx: 4, dy: 4, r: 3, y: config._particleConfig.y + 10, x: config._particleConfig.x + 30, color: "#0000ff", mass: 1 },
             { dx: 4, dy: 4, r: 3, y: config._particleConfig.y + 100, x: config._particleConfig.x + 100, color: "#00ff00", mass: 1 },
@@ -64,13 +70,19 @@
             { dx: 3, dy: 5, r: 3, y: config._particleConfig.y + 0, x: config._particleConfig.x + 50, color: "#00ffff", mass: 1 },
             { dx: 4, dy: 4, r: 3, y: config._particleConfig.y + 45, x: config._particleConfig.x + 0, color: "#ffff00", mass: 1 },
             { dx: 7, dy: 1, r: 3, y: config._particleConfig.y + 105, x: config._particleConfig.x + 80, color: "#ff00ff", mass: 1 },
-            { dx: 7, dy: 1, r: 3, y: config._particleConfig.y + 5, x: config._particleConfig.x + 20, color: "#ff00ff", mass: 1 }
+            { dx: 7, dy: 1, r: 3, y: config._particleConfig.y + 5, x: config._particleConfig.x + 20, color: "#ff00ff", mass: 1 },
+            { dx: 4, dy: 4, r: 3, y: config._particleConfig.y + 15, x: config._particleConfig.x + 35, color: "#0000ff", mass: 1 },
+            { dx: 4, dy: 4, r: 3, y: config._particleConfig.y + 105, x: config._particleConfig.x + 105, color: "#00ff00", mass: 1 },
+            { dx: 3, dy: 5, r: 3, y: config._particleConfig.y + 55, x: config._particleConfig.x + 55, color: "#00ffff", mass: 1 },
+            { dx: 4, dy: 4, r: 3, y: config._particleConfig.y + 50, x: config._particleConfig.x + 35, color: "#ffff00", mass: 1 },
+            { dx: 7, dy: 1, r: 3, y: config._particleConfig.y + 80, x: config._particleConfig.x + 55, color: "#ff00ff", mass: 1 },
+            { dx: 4, dy: 4, r: 3, y: config._particleConfig.y + 95, x: config._particleConfig.x + 95, color: "#00ff00", mass: 1 },
+            { dx: 3, dy: 5, r: 3, y: config._particleConfig.y + 5, x: config._particleConfig.x + 55, color: "#00ffff", mass: 1 },
+            { dx: 4, dy: 4, r: 3, y: config._particleConfig.y + 45, x: config._particleConfig.x + 5, color: "#ffff00", mass: 1 },
+            { dx: 7, dy: 1, r: 3, y: config._particleConfig.y + 110, x: config._particleConfig.x + 85, color: "#ff00ff", mass: 1 },
+            { dx: 7, dy: 1, r: 3, y: config._particleConfig.y + 10, x: config._particleConfig.x + 25, color: "#ff00ff", mass: 1 }
+
         ];
-
-
-
-      
-        this.valid = false; // when set to false, the canvas will redraw everything
 
         this.volShape = new Shape();
         this.temperShape = new Shape();
@@ -87,6 +99,18 @@
 
         // **** Then events! ****
         var myState = this;
+
+        if (config.moleSliderId) {
+            $(document).on('change', config.moleSliderId, function () {
+                var _mol = $(this).val();
+                $('#lblMoleNumber4').html(_mol);
+                if (_mol && _mol > 0) {
+                    myState._ballLength = 10 * _mol;
+                    myState.pressure =  parseFloat(_mol);
+                    myState.valid=false;
+                }
+            });
+        }
 
         //fixes a problem where double clicking causes text to get selected on the canvas
         this.canvas.addEventListener('selectstart', function (e) { e.preventDefault(); return false; }, false);
@@ -216,6 +240,9 @@
 
         this.selectionColor = '#CC0000';
         this.selectionWidth = 2;
+
+        this.valid = false; // when set to false, the canvas will redraw everything
+
         this.interval = 30;
         setInterval(function () { myState.draw(); }, myState.interval);
     }
@@ -232,13 +259,9 @@
         if (!this.valid) {
             this.clear();          
 
-            var _maxPressure = 4.5; //atm
-            if (this.type == 'gaylussac') {
-                _maxPressure = 2.0; //atm
-            }
             if (this.needle1 && this.needle1.src) {
                 ctx.translate(this.needle1.X, this.needle1.Y); // change origin
-                var _pct = (_maxPressure - this.pressure) / _maxPressure;
+                var _pct = (this.maxPressure - this.pressure) / this.maxPressure;
                 var _angleInRadians = (Math.PI / 4 - (Math.PI / 2 * _pct)) ;
                 ctx.rotate(_angleInRadians); //rotate the whole context
                 ctx.drawImage(this.needle1, -this.needle1.width / 2, -this.needle1.height);
@@ -282,7 +305,7 @@
                 _cfg.height = this.volumeMax - this.volShape.y;
                 _cfg.speed = this.speed;
                 _cfg.context = ctx;
-                this.particles.draw(_cfg, this._balls);
+                this.particles.draw(_cfg, this._balls, this._ballLength);
             }
 
         }

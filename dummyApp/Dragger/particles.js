@@ -26,17 +26,18 @@
     //    speed = config.speed;
     //}
   
-    Particles.prototype.draw = function (cfg, balls) {
+    Particles.prototype.draw = function (cfg, balls, ballLength) {
         cfg.context.clearRect(cfg.x, cfg.y, cfg.width, cfg.height);
 
         //var balls = this.getBalls();
 
-        for (var i = 0; i < balls.length; i++) {
-            updatePosition(balls[i], cfg);
+        //for (var i = 0; i < balls.length; i++) {
+            for (var i = 0; i < ballLength; i++) {
+                updatePosition(balls[i], cfg);
         }
 
-        for (var a = 0; a < balls.length; a++) {
-            for (var b = 0; b < balls.length; b++) {
+            for (var a = 0; a < ballLength; a++) {
+                for (var b = 0; b < ballLength; b++) {
                 if (a != b) {
                     checkCollisionOuter(balls[a], balls[b]);
                 }

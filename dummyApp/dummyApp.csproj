@@ -62,6 +62,7 @@
   <ItemGroup>
     <Content Include="Dragger\animation.js" />
     <Content Include="Dragger\background.js" />
+    <Content Include="Dragger\jquery-3.1.0.min.js" />
     <Content Include="Dragger\particles.js" />
     <Content Include="Dragger\dragger.html" />
     <Content Include="Dragger\dragger.js" />
