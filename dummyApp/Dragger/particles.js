@@ -1,43 +1,16 @@
 ﻿function Particles () {
-  
-    //var _balls;
     
     Particles.prototype.init = function (config) {
-        //_balls = new Array();
-
-        //_balls = [{ dx: 4, dy: 4, r: 3, y: config.y + 10, x: config.x + 30, color: "#0000ff", mass: 1 },
-        //            { dx: 4, dy: 4, r: 3, y: config.y + 100, x: config.x + 100, color: "#00ff00", mass: 1 },
-        //            { dx: 3, dy: 5, r: 3, y: config.y + 50, x: config.x + 50, color: "#00ffff", mass: 1 },
-        //            { dx: 4, dy: 4, r: 3, y: config.y + 45, x: config.x + 30, color: "#ffff00", mass: 1 },
-        //            { dx: 7, dy: 1, r: 3, y: config.y + 75, x: config.x + 55, color: "#ff00ff", mass: 1 },
-        //            { dx: 4, dy: 4, r: 3, y: config.y + 90, x: config.x + 90, color: "#00ff00", mass: 1 },
-        //            { dx: 3, dy: 5, r: 3, y: config.y + 0, x: config.x + 50, color: "#00ffff", mass: 1 },
-        //            { dx: 4, dy: 4, r: 3, y: config.y + 45, x: config.x + 0, color: "#ffff00", mass: 1 },
-        //            { dx: 7, dy: 1, r: 3, y: config.y + 105, x: config.x + 80, color: "#ff00ff", mass: 1 },
-        //            { dx: 7, dy: 1, r: 3, y: config.y + 5, x: config.x + 20, color: "#ff00ff", mass: 1 }
-        //];
     }
 
-    //Particles.prototype.update = function (config) {
-    //    width = config.width;
-    //    height = config.height;
-    //    x = config.x;
-    //    y = config.y;
-    //    speed = config.speed;
-    //}
-  
     Particles.prototype.draw = function (cfg, balls, ballLength) {
         cfg.context.clearRect(cfg.x, cfg.y, cfg.width, cfg.height);
-
-        //var balls = this.getBalls();
-
-        //for (var i = 0; i < balls.length; i++) {
-            for (var i = 0; i < ballLength; i++) {
-                updatePosition(balls[i], cfg);
+        for (var i = 0; i < ballLength; i++) {
+            updatePosition(balls[i], cfg);
         }
 
-            for (var a = 0; a < ballLength; a++) {
-                for (var b = 0; b < ballLength; b++) {
+        for (var a = 0; a < ballLength; a++) {
+            for (var b = 0; b < ballLength; b++) {
                 if (a != b) {
                     checkCollisionOuter(balls[a], balls[b]);
                 }
@@ -81,11 +54,11 @@
         cfg.context.closePath();
         cfg.context.fill();
 
-        cfg.context.beginPath();
-        cfg.context.fillStyle = "#000000";
-        cfg.context.arc(ball.x, ball.y, 2, 0, Math.PI * 2, true);
-        cfg.context.closePath();
-        cfg.context.fill();
+        //cfg.context.beginPath();
+        //cfg.context.fillStyle = "#000000";
+        //cfg.context.arc(ball.x, ball.y, 2, 0, Math.PI * 2, true);
+        //cfg.context.closePath();
+        //cfg.context.fill();
 
     }
 

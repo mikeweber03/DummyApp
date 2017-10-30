@@ -4,30 +4,49 @@
     function CanvasState(config) {
         this._balls = new Array();
 
-
         // **** First some setup! ****
         this.canvas = config.parentObject;
+        this.ctx = this.canvas.getContext('2d');
+
         this.type = config.type;
         this.width = this.canvas.width;
         this.height = this.canvas.height;
 
+        // ******These are set by the background picture
+        this.volumeX = 83;
+        this.volumeWidth = 131;
+        this.volumeMax = 200;
+        this.volumeMin = 0;
+        this.temperX = 246;
+        this.temperWidth = 14;
+        this.needle1X = 43;
+        this.needle1Y = 120;
+        this.temperMax = 155;
+        this.temperMin = 65;
+        this.speed = 0.5;
+        //particle limits
+        var _cfg = {};
+        _cfg.context = this.ctx;
+        _cfg.width = 131;
+        _cfg.height = 100;
+        _cfg.x = 83;
+        _cfg.y = 100;
+        _cfg.speed = 0.5;
+
+      
+        this.moleSliderId = config.moleSliderId;
         this.volume = config.startVolume;
         this.pressure = config.startPressure;
-        this.volumeMax = config.volumeMax;
-        this.volumeMin = config.volumeMin;
-        this.volumeX = config.volumeX;
-        this.volumeWidth = config.volumeWidth;
+        this.temperature = config.startTemperature;
 
         this.volMaxLiter = config.volMaxLiter;
-        this.temperature = config.startTemperature;
         this.tempMaxK = config.tempMaxK;
-        this.temperMax= config.temperMax;
-        this.temperMin = config.temperMin;
         this.maxPressure = config.maxPressure;
 
-        this.speed = 0.5;
         this.particles = new Particles();
-        this.particles.init(config._particleConfig);
+        this._particleConfig = _cfg;
+        this.particles.init(_cfg);
+        //this.particles.init(this._particleConfig);
 
         if (this.type == 'boyle') {
             this.k = this.volume * this.pressure;
@@ -38,12 +57,35 @@
         if (this.type == 'gaylussac') {
             this.k = this.pressure / this.temperature;
         }
+        if (this.type == "combo") {
+            this.k = this.volume * this.pressure / this.temperature;
+        }
         if (this.type == 'avagadro') {
             //We'll multiply this by changed mole numbers
             this.k = this.pressure ;
         }
+       
 
-        this.ctx = this.canvas.getContext('2d');
+
+        //Set the volShape
+        var _vPct = (this.volMaxLiter - this.volume) / this.volMaxLiter;
+        //var _vol = ((this.volMaxLiter - this.startVolume) / this.volMaxLiter) * this.volumeMax;
+        var _vol = this.volumeMax * _vPct;
+        var _color = (this.type == 'boyle' || this.type == 'combo' || this.type == 'ideal') ? '#aa00ff' : '#444444';
+        this.volShape = new Shape(this.volumeX, this.volumeMax - _vol, this.volumeWidth, 20, _color);
+
+        //Set the temperShape
+        //Take the high temperature (400k) and subtract the start temperature, then divide by the total gap (400k - 200k)
+        var _tPct = (this.tempMaxK - this.temperature) / 200;
+        var _tGap = (this.temperMax - this.temperMin) * _tPct;
+        var _colorT = (this.type == 'charles' || this.type == 'gaylussac' || this.type=='combo' || this.type=='ideal') ? '#aa00ff' : '#444444';
+        this.temperShape = new Shape(this.temperX, this.temperMin + _tGap, this.temperWidth, 20, _colorT);
+
+        //updateCollisionArea(s);
+        this.valid = false;
+
+
+
         // This complicates things a little but but fixes mouse co-ordinate problems
         // when there's a border or padding. See getMouse for more detail
         var stylePaddingLeft, stylePaddingTop, styleBorderLeft, styleBorderTop;
@@ -61,35 +103,35 @@
 
         this._ballLength = 10;
         this._balls = [
-            { dx: 4, dy: 4, r: 3, y: config._particleConfig.y + 10, x: config._particleConfig.x + 30, color: "#0000ff", mass: 1 },
-            { dx: 4, dy: 4, r: 3, y: config._particleConfig.y + 100, x: config._particleConfig.x + 100, color: "#00ff00", mass: 1 },
-            { dx: 3, dy: 5, r: 3, y: config._particleConfig.y + 50, x: config._particleConfig.x + 50, color: "#00ffff", mass: 1 },
-            { dx: 4, dy: 4, r: 3, y: config._particleConfig.y + 45, x: config._particleConfig.x + 30, color: "#ffff00", mass: 1 },
-            { dx: 7, dy: 1, r: 3, y: config._particleConfig.y + 75, x: config._particleConfig.x + 55, color: "#ff00ff", mass: 1 },
-            { dx: 4, dy: 4, r: 3, y: config._particleConfig.y + 90, x: config._particleConfig.x + 90, color: "#00ff00", mass: 1 },
-            { dx: 3, dy: 5, r: 3, y: config._particleConfig.y + 0, x: config._particleConfig.x + 50, color: "#00ffff", mass: 1 },
-            { dx: 4, dy: 4, r: 3, y: config._particleConfig.y + 45, x: config._particleConfig.x + 0, color: "#ffff00", mass: 1 },
-            { dx: 7, dy: 1, r: 3, y: config._particleConfig.y + 105, x: config._particleConfig.x + 80, color: "#ff00ff", mass: 1 },
-            { dx: 7, dy: 1, r: 3, y: config._particleConfig.y + 5, x: config._particleConfig.x + 20, color: "#ff00ff", mass: 1 },
-            { dx: 4, dy: 4, r: 3, y: config._particleConfig.y + 15, x: config._particleConfig.x + 35, color: "#0000ff", mass: 1 },
-            { dx: 4, dy: 4, r: 3, y: config._particleConfig.y + 105, x: config._particleConfig.x + 105, color: "#00ff00", mass: 1 },
-            { dx: 3, dy: 5, r: 3, y: config._particleConfig.y + 55, x: config._particleConfig.x + 55, color: "#00ffff", mass: 1 },
-            { dx: 4, dy: 4, r: 3, y: config._particleConfig.y + 50, x: config._particleConfig.x + 35, color: "#ffff00", mass: 1 },
-            { dx: 7, dy: 1, r: 3, y: config._particleConfig.y + 80, x: config._particleConfig.x + 55, color: "#ff00ff", mass: 1 },
-            { dx: 4, dy: 4, r: 3, y: config._particleConfig.y + 95, x: config._particleConfig.x + 95, color: "#00ff00", mass: 1 },
-            { dx: 3, dy: 5, r: 3, y: config._particleConfig.y + 5, x: config._particleConfig.x + 55, color: "#00ffff", mass: 1 },
-            { dx: 4, dy: 4, r: 3, y: config._particleConfig.y + 45, x: config._particleConfig.x + 5, color: "#ffff00", mass: 1 },
-            { dx: 7, dy: 1, r: 3, y: config._particleConfig.y + 110, x: config._particleConfig.x + 85, color: "#ff00ff", mass: 1 },
-            { dx: 7, dy: 1, r: 3, y: config._particleConfig.y + 10, x: config._particleConfig.x + 25, color: "#ff00ff", mass: 1 }
+            { dx: 4, dy: 4, r: 3, y: this._particleConfig.y + 10, x: this._particleConfig.x + 30, color: "#0000ff", mass: 1 },
+            { dx: 4, dy: 4, r: 3, y: this._particleConfig.y + 100, x: this._particleConfig.x + 100, color: "#009900", mass: 1 },
+            { dx: 3, dy: 5, r: 3, y: this._particleConfig.y + 50, x: this._particleConfig.x + 50, color: "#0099ff", mass: 1 },
+            { dx: 4, dy: 4, r: 3, y: this._particleConfig.y + 45, x: this._particleConfig.x + 30, color: "#ff9900", mass: 1 },
+            { dx: 7, dy: 1, r: 3, y: this._particleConfig.y + 75, x: this._particleConfig.x + 55, color: "#ff00ff", mass: 1 },
+            { dx: 4, dy: 4, r: 3, y: this._particleConfig.y + 90, x: this._particleConfig.x + 90, color: "#00ff00", mass: 1 },
+            { dx: 3, dy: 5, r: 3, y: this._particleConfig.y + 0, x: this._particleConfig.x + 50, color: "#0099ff", mass: 1 },
+            { dx: 4, dy: 4, r: 3, y: this._particleConfig.y + 45, x: this._particleConfig.x + 0, color: "#ffff00", mass: 1 },
+            { dx: 7, dy: 1, r: 3, y: this._particleConfig.y + 105, x: this._particleConfig.x + 80, color: "#ff00ff", mass: 1 },
+            { dx: 7, dy: 1, r: 3, y: this._particleConfig.y + 5, x: this._particleConfig.x + 20, color: "#ff00ff", mass: 1 },
+            { dx: 4, dy: 4, r: 3, y: this._particleConfig.y + 15, x: this._particleConfig.x + 35, color: "#0000ff", mass: 1 },
+            { dx: 4, dy: 4, r: 3, y: this._particleConfig.y + 105, x: this._particleConfig.x + 105, color: "#009900", mass: 1 },
+            { dx: 3, dy: 5, r: 3, y: this._particleConfig.y + 55, x: this._particleConfig.x + 55, color: "#0099ff", mass: 1 },
+            { dx: 4, dy: 4, r: 3, y: this._particleConfig.y + 50, x: this._particleConfig.x + 35, color: "#ff9900", mass: 1 },
+            { dx: 7, dy: 1, r: 3, y: this._particleConfig.y + 80, x: this._particleConfig.x + 55, color: "#ff00ff", mass: 1 },
+            { dx: 4, dy: 4, r: 3, y: this._particleConfig.y + 95, x: this._particleConfig.x + 95, color: "#009900", mass: 1 },
+            { dx: 3, dy: 5, r: 3, y: this._particleConfig.y + 5, x: this._particleConfig.x + 55, color: "#0099ff", mass: 1 },
+            { dx: 4, dy: 4, r: 3, y: this._particleConfig.y + 45, x: this._particleConfig.x + 5, color: "#ff9900", mass: 1 },
+            { dx: 7, dy: 1, r: 3, y: this._particleConfig.y + 110, x: this._particleConfig.x + 85, color: "#ff00ff", mass: 1 },
+            { dx: 7, dy: 1, r: 3, y: this._particleConfig.y + 10, x: this._particleConfig.x + 25, color: "#ff00ff", mass: 1 }
 
         ];
 
-        this.volShape = new Shape();
-        this.temperShape = new Shape();
+        //this.volShape = new Shape();
+        //this.temperShape = new Shape();
         this.needle1 = new Image();
         this.needle1.src = "image/needle.png";
-        this.needle1.X = config.needle1X;
-        this.needle1.Y = config.needle1Y;
+        this.needle1.X = this.needle1X;
+        this.needle1.Y = this.needle1Y;
 
 
         this.volDragging = false; // Keep track of when we are dragging the volume
@@ -103,10 +145,16 @@
         if (config.moleSliderId) {
             $(document).on('change', config.moleSliderId, function () {
                 var _mol = $(this).val();
-                $('#lblMoleNumber4').html(_mol);
+                $(config.moleDisplayId).html(_mol);
                 if (_mol && _mol > 0) {
                     myState._ballLength = 10 * _mol;
-                    myState.pressure =  parseFloat(_mol);
+                    if (myState.type == 'avagadro') {
+                        myState.pressure = parseFloat(_mol);
+                    }
+                    if (myState.type == 'ideal') {
+                        myState.pressure = idealGasEquation(myState);
+                        //myState.pressure = parseFloat(_mol) * myState.R * myState.temperature / myState.volume;
+                    }
                     myState.valid=false;
                 }
             });
@@ -141,7 +189,7 @@
             var my = mouse.y;
 
             //See if we're dragging the volume
-            if (myState.type == 'boyle') {
+            if (myState.type == 'boyle' || myState.type=='combo'|| myState.type=='ideal') {
                 if (myState.volShape.contains(mx, my)) {
                     myState.dragoffx = mx - myState.volShape.x;
                     myState.dragoffy = my - myState.volShape.y;
@@ -152,7 +200,7 @@
                 }
             }
             //See if we're dragging the temperature
-            if (myState.type == 'charles' || myState.type == 'gaylussac') {
+            if (myState.type == 'charles' || myState.type == 'gaylussac' || myState.type=='combo' || myState.type=='ideal') {
                 if (myState.temperShape.contains(mx, my)) {
                     myState.dragoffx = mx - myState.temperShape.x;
                     myState.dragoffy = my - myState.temperShape.y;
@@ -178,12 +226,20 @@
                     myState.volShape.y = myState.volumeMax - 30;
                 }
 
-                //The max volume is 45.0L
                 
                 myState.volume = ((myState.volumeMax - myState.volShape.y + myState.volShape.h) / myState.volumeMax) * myState.volMaxLiter;
 
-                //Math specific to Boyle's Law
-                myState.pressure = myState.k / myState.volume;
+                if (myState.type == "boyle") {
+                    //Math specific to Boyle's Law
+                    myState.pressure = myState.k / myState.volume;
+                }
+
+                if (myState.type == "combo") {
+                    myState.pressure = myState.k * myState.temperature / myState.volume;
+                }
+                if (myState.type == 'ideal') {
+                    myState.pressure = idealGasEquation(myState);
+                }
 
                 myState.valid = false; // Something's dragging so we must redraw
             }
@@ -212,14 +268,26 @@
                 if (myState.type == 'charles') {
                     myState.volume = myState.k * myState.temperature;
                     //Adjust the volume based on the temperature
-                    myState.volShape.y = (((myState.volMaxLiter - myState.volume) / config.volMaxLiter) * config.volumeMax) + myState.volShape.h;
+                    myState.volShape.y = (((myState.volMaxLiter - myState.volume) / myState.volMaxLiter) * myState.volumeMax) + myState.volShape.h;
                 }
                 //Math specific to Gay-Lussac's Law'
                 else {
-                    myState.pressure = myState.k * myState.temperature;
+                    if (myState.type == "gaylussac") {
+                        myState.pressure = myState.k * myState.temperature;
+                    }
+                    else {
+                        if (myState.type == 'combo') {
+                            myState.pressure = myState.k * myState.temperature / myState.volume;
+                        }
+                        else {
+                            if (myState.type == 'ideal') {
+                                myState.pressure = idealGasEquation(myState);
+                            }
+                        }
+                    }
                 }
 
-                if (myState.type == "charles" || myState.type == "gaylussac") {
+                if (myState.type == "charles" || myState.type == "gaylussac" || myState.type == 'combo' || myState.type=='ideal') {
                     //Get the pct to adjust speed
                     var _pctTemp = (myState.temperature - 175) / (myState.tempMaxK - 175);
                     myState.speed = _pctTemp * 1.5;
@@ -348,24 +416,6 @@
 
     wholeThing.prototype.init = function(config) {
         var s = new CanvasState(config);
-       
-        //Set the volShape
-        //Take 100L minus the start volume times the 100L to get a percent of the original
-        var _vPct = (config.volMaxLiter - config.startVolume) / config.volMaxLiter;
-        //var _vol = ((config.volMaxLiter - config.startVolume) / config.volMaxLiter) * config.volumeMax;
-        var _vol = config.volumeMax * _vPct;
-        var _color = config.type == 'boyle' ? '#aa00ff' : '#444444';
-        s.volShape = new Shape(config.volumeX, config.volumeMax -_vol + 20, config.volumeWidth, 20, _color);
-
-        //Set the temperShape
-        //Take the high temperature (400k) and subtract the start temperature, then divide by the total gap (400k - 200k)
-        var _tPct = (config.tempMaxK - config.startTemperature) / 200;
-        var _tGap = (config.temperMax - config.temperMin) * _tPct;
-        var _colorT = (config.type == 'charles' || config.type == 'gaylussac') ? '#aa00ff' : '#444444';
-        s.temperShape = new Shape(config.temperX, config.temperMin + _tGap , config.temperWidth, 20, _colorT);
-
-        //updateCollisionArea(s);
-        s.valid = false;
     }
 
     function Shape(x, y, w, h, fill) {
@@ -391,6 +441,13 @@
         // the shape's X and (X + Width) and its Y and (Y + Height)
         return (this.x <= mx) && (this.x + this.w >= mx) &&
                 (this.y <= my) && (this.y + this.h >= my);
+    }
+
+    function idealGasEquation(myState) {
+        var _R = 8.314;
+        var _mol = $(myState.moleSliderId).val();
+        var p = parseFloat(_mol) * _R * myState.temperature / (myState.volume * 100);
+        return p;
     }
   
 

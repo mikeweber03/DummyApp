@@ -3,149 +3,90 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
+    <link rel="stylesheet" type="text/css" href="style.css">
     <script src="jquery-3.1.0.min.js"></script>
     <script src="animation.js"></script>
     <script src="particles.js"></script>
     <script>
         function loader() {
-            var _cfg = {};
-            _cfg.context = document.getElementById('canvas1').getContext('2d');
-            _cfg.width = 131;
-            _cfg.height = 100;
-            _cfg.x = 83;
-            _cfg.y = 100;
-            _cfg.speed = 1.0;
-
+           
             var wt1 = new wholeThing();
             var config = {};
             config.startPressure = 1.0;
-
-            config.startVolume = 22.0;
-            config.volMaxLiter = 45.0;
-            config.volumeMax = 200;
-            config.volumeMin = 0;
-            config.volumeX = 83;
-            config.volumeWidth = 131;
-         
-            config.startTemperature = 303.15;
-            config.tempMaxK = 400;
-            config.temperMax = 155;
-            config.temperMin = 65;
-            config.temperX = 246;
-            config.temperWidth = 14;
-
-            config.needle1X = 43;
-            config.needle1Y = 120;
             config.maxPressure = 2.0;
+            config.startVolume = 22.0;
+            config.volMaxLiter = 40.0;           
+            config.startTemperature = 303.15;
+            config.tempMaxK = 400;         
             config.parentObject = document.getElementById('canvas1');
             config.type = "boyle";
-            config._particleConfig = _cfg;
             wt1.init(config);
 
-            var _cfg2 = {};
-            _cfg2.context = document.getElementById('canvas2').getContext('2d');
-            _cfg2.width = 131;
-            _cfg2.height = 100;
-            _cfg2.x = 83;
-            _cfg2.y = 100;
-            _cfg2.speed = 1.0;
 
             var wt2 = new wholeThing();
             var config2 = {};
             config2.startPressure = 1.0;
-
+            config2.maxPressure = 2.0;
             config2.startVolume = 22.0;
-            config2.volMaxLiter = 45.0;
-            config2.volumeMax = 200;
-            config2.volumeMin = 0;
-            config2.volumeX = 83;
-            config2.volumeWidth = 131;
-
+            config2.volMaxLiter = 40.0;
             config2.startTemperature = 303.15;
             config2.tempMaxK = 400;
-            config2.temperMax = 155;
-            config2.temperMin = 65;
-            config2.temperX = 246;
-            config2.temperWidth = 14;          
-
-            config2.needle1X = 43;
-            config2.needle1Y = 120;
-            config2.maxPressure = 2.0;
             config2.parentObject = document.getElementById('canvas2');
             config2.type = "charles";
-            config2._particleConfig = _cfg2;
             wt2.init(config2);
-
-            var _cfg3 = {};
-            _cfg3.context = document.getElementById('canvas3').getContext('2d');
-            _cfg3.width = 131;
-            _cfg3.height = 100;
-            _cfg3.x = 83;
-            _cfg3.y = 100;
-            _cfg3.speed = 1.0;
 
             var wt3 = new wholeThing();
             var config3 = {};
             config3.startPressure = 1.0;
-
+            config3.maxPressure = 2.0;
             config3.startVolume = 22.0;
-            config3.volMaxLiter = 45.0;
-            config3.volumeMax = 200;
-            config3.volumeMin = 0;
-            config3.volumeX = 83;
-            config3.volumeWidth = 131;
-
+            config3.volMaxLiter = 40.0;
             config3.startTemperature = 303.15;
             config3.tempMaxK = 400;
-            config3.temperMax = 155;
-            config3.temperMin = 65;
-            config3.temperX = 246;
-            config3.temperWidth = 14;
-
-            config3.needle1X = 43;
-            config3.needle1Y = 120;
-            config3.maxPressure = 2.0;
             config3.parentObject = document.getElementById('canvas3');
             config3.type = "gaylussac";
-            config3._particleConfig = _cfg3;
-
             wt3.init(config3);
-
-            var _cfg4 = {};
-            _cfg4.context = document.getElementById('canvas4').getContext('2d');
-            _cfg4.width = 131;
-            _cfg4.height = 100;
-            _cfg4.x = 83;
-            _cfg4.y = 100;
-            _cfg4.speed = 1.0;
 
             var wt4 = new wholeThing();
             var config4 = {};
             config4.startPressure = 1.0;
-
+            config4.maxPressure = 2.0;
             config4.startVolume = 22.0;
-            config4.volMaxLiter = 45.0;
-            config4.volumeMax = 200;
-            config4.volumeMin = 0;
-            config4.volumeX = 83;
-            config4.volumeWidth = 131;
-
+            config4.volMaxLiter = 40.0;            
             config4.startTemperature = 303.15;
             config4.tempMaxK = 400;
-            config4.temperMax = 155;
-            config4.temperMin = 65;
-            config4.temperX = 246;
-            config4.temperWidth = 14;
-
-            config4.needle1X = 43;
-            config4.needle1Y = 120;
-            config4.maxPressure = 2.0;
             config4.parentObject = document.getElementById('canvas4');
             config4.moleSliderId = "#moleNumber4";
-            config4.type = "gaylussac";
-            config4._particleConfig = _cfg4;
-
+            config4.moleDisplayId = "#lblMoleNumber4";
+            config4.type = "avagadro";
             wt4.init(config4);
+
+            var wtCombo = new wholeThing();
+            var configCombo = {};
+            configCombo.startPressure = 1.0;
+            configCombo.maxPressure = 3.0;
+            configCombo.startVolume = 22.0;
+            configCombo.volMaxLiter = 40.0;
+            configCombo.startTemperature = 303.15;
+            configCombo.tempMaxK = 400;
+            configCombo.parentObject = document.getElementById('canvasCombo');
+            configCombo.type = "combo";
+            wtCombo.init(configCombo);
+
+            var wtIdeal = new wholeThing();
+            var configIdeal = {};
+            configIdeal.startPressure = 1.0;
+            configIdeal.maxPressure = 4.0;
+            configIdeal.startVolume = 22.0;
+            configIdeal.volMaxLiter = 40.0;
+            configIdeal.startTemperature = 303.15;
+            configIdeal.tempMaxK = 400;
+            configIdeal.parentObject = document.getElementById('canvasIdeal');
+            configIdeal.moleSliderId = "#moleNumberIdeal";
+            configIdeal.moleDisplayId = "#lblMoleNumberIdeal";
+            configIdeal.type = "ideal";
+            wtIdeal.init(configIdeal);
+
         }
     </script>
    
@@ -153,43 +94,69 @@
     <body onLoad='loader();'>
         <div>
             <br /><br />
-            <div style="position:fixed; top:40px;">
-                <span style="font-size:14pt; font-weight:bold">Boyle's Law</span>
-                <image src="image/volume.png" style="position:fixed; width:300px; top:80px">
+            <div  class="container">
+                <span style="display :block;font-size:14pt; font-weight:bold">Boyle's Law</span>
+                <image src="image/volume.png" style="width:300px;" class="backgroundItem">
                 </image>
-                <canvas id="canvas1" width="300" height="219" style="position:fixed; top:80px">
+                <canvas id="canvas1" width="300" height="219" class="backgroundItem">
                     This text is displayed if your browser does not support HTML5 Canvas.
                 </canvas>
             </div>
-            <div style="position :fixed; left:500px; top:40px">
-                <span style="font-size:14pt; font-weight:bold">Charles' Law</span>
-                <image src="image/volume.png" style="position:fixed; width:300px; left:500px; top:80px;">
+            <div class="container">
+                <span style="display :block; font-size:14pt; font-weight:bold">Charles' Law</span>
+                <image src="image/volume.png" style="width:300px;" class="backgroundItem">
                 </image>
-                <canvas id="canvas2" width="300" height="219" style="position:fixed; left:500px; top:80px">
+                <canvas id="canvas2" width="300" height="219" class="backgroundItem">
                     This text is displayed if your browser does not support HTML5 Canvas.
                 </canvas>
             </div>
-            <div style="position:fixed; top:340px;">
-                <span style="font-size:14pt; font-weight:bold">Gay-Lussac's Law</span>
-                <image src="image/volume.png" style="position:fixed; width:300px; top:380px">
+            <div  class="container">
+                <span style="font-size:14pt; font-weight:bold; display :block; ">Gay-Lussac's Law</span>
+                <image src="image/volume.png" style="width:300px;" class="backgroundItem">
                 </image>
-                <canvas id="canvas3" width="300" height="219" style="position:fixed; top:380px">
+                <canvas id="canvas3" width="300" height="219" class="backgroundItem">
                     This text is displayed if your browser does not support HTML5 Canvas.
                 </canvas>
             </div>
-            <div style="position:fixed; top:340px;left :500px; height:300px;width:310px">
+            <div class="container">
+                <span style="font-size:14pt; font-weight:bold; display :block; ">Combined Gas Law</span>
+                <image src="image/volume.png" style="width:300px;" class="backgroundItem">
+                </image>
+                <canvas id="canvasCombo" width="300" height="219" class="backgroundItem">
+                    This text is displayed if your browser does not support HTML5 Canvas.
+                </canvas>
+            </div>
+            <div class="container">
                 <span style="font-size:14pt; font-weight:bold">Avagadro's Law</span>
-                <image src="image/volume.png" style="position:fixed; width:300px; top:380px; left:500px">
+                <image src="image/volume.png" style="width:300px;" class="backgroundItem">
                 </image>
-                <canvas id="canvas4" width="300" height="219" style="position:fixed; top:380px; left : 500px">
+                <canvas id="canvas4" width="300" height="219" class="backgroundItem">
                     This text is displayed if your browser does not support HTML5 Canvas.
                 </canvas>
-                <div style="position: absolute;bottom: 0;left: 0;font-size:12px">
-                    <b>Number of Moles</b>
-                    <label id="lblMoleNumber4"></label>
-                    <input id="moleNumber4" type="range" min="0.1" max="2" value="1" step="0.1" style="height:40px; width:300px; margin:0; ">
+                <div style="position: absolute;bottom: 30px;left: 0;font-size:12px; width:310px; text-align:center">
+                    <div style="display:block">
+                        <b>NUMBER OF MOLES</b>
+                        <label id="lblMoleNumber4">1.0</label>
+                    </div>
+                    <input id="moleNumber4" type="range" min="0.1" max="2" value="1" step="0.1" >
                 </div>
             </div>
+            <div class="container">
+                <span style="font-size:14pt; font-weight:bold">Ideal Gas Law</span>
+                <image src="image/volume.png" style="width:300px;" class="backgroundItem">
+                </image>
+                <canvas id="canvasIdeal" width="300" height="219" class="backgroundItem">
+                    This text is displayed if your browser does not support HTML5 Canvas.
+                </canvas>
+                <div style="position: absolute;bottom: 30px;left: 0;font-size:12px; width:310px; text-align:center">
+                    <div style="display:block">
+                        <b>NUMBER OF MOLES</b>
+                        <label id="lblMoleNumberIdeal">1.0</label>
+                    </div>
+                    <input id="moleNumberIdeal" type="range" min="0.1" max="2" value="1" step="0.1">
+                </div>
+            </div>
+
         </div>
     </body>
 </html>

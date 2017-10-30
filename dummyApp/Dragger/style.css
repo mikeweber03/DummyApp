@@ -1,0 +1,47 @@
+﻿.backgroundItem{
+    position:absolute; 
+    top:40px;
+    left:0px;
+}
+.container{
+    position:relative; 
+    display :inline-block; 
+    height:350px;
+    width:310px
+}
+
+
+input[type='range'] {
+  width: 180px;
+  height: 35px;
+  overflow: hidden;
+  cursor: pointer;
+  display:inline-block;
+}
+input[type='range'],
+input[type='range']::-webkit-slider-runnable-track,
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+input[type='range']::-webkit-slider-runnable-track {
+  width: 180px;
+  height: 2px;
+  background: #AAA;
+}
+input[type='range']::-webkit-slider-thumb {
+  position: relative;
+  height: 30px;
+  width: 20px;
+  margin-top: -10px;
+  background: #aa00ff;
+  border-radius: 30%;
+  border: 1px solid white;
+}
+input[type='range']::-webkit-slider-thumb::before {
+  position: absolute;
+  content: '';
+  height: 10px; /* equal to height of runnable track */
+  width: 500px; /* make this bigger than the widest range input element */
+  left: -502px; /* this should be -2px - width */
+  top: 8px; /* don't change this */
+}
