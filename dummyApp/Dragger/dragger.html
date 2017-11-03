@@ -3,6 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
+    <script type="text/javascript" async
+            src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=MML_CHTML">
+    </script>
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="jquery-3.1.0.min.js"></script>
     <script src="animation.js"></script>
@@ -14,9 +17,9 @@
             var config = {};
             config.startPressure = 1.0;
             config.maxPressure = 2.0;
-            config.startVolume = 22.0;
+            config.startVolume = 22.4;
             config.volMaxLiter = 40.0;           
-            config.startTemperature = 303.15;
+            config.startTemperature = 273;
             config.tempMaxK = 400;         
             config.parentObject = document.getElementById('canvas1');
             config.type = "boyle";
@@ -27,9 +30,9 @@
             var config2 = {};
             config2.startPressure = 1.0;
             config2.maxPressure = 2.0;
-            config2.startVolume = 22.0;
+            config2.startVolume = 22.4;
             config2.volMaxLiter = 40.0;
-            config2.startTemperature = 303.15;
+            config2.startTemperature = 273;
             config2.tempMaxK = 400;
             config2.parentObject = document.getElementById('canvas2');
             config2.type = "charles";
@@ -39,9 +42,9 @@
             var config3 = {};
             config3.startPressure = 1.0;
             config3.maxPressure = 2.0;
-            config3.startVolume = 22.0;
+            config3.startVolume = 22.4;
             config3.volMaxLiter = 40.0;
-            config3.startTemperature = 303.15;
+            config3.startTemperature = 273;
             config3.tempMaxK = 400;
             config3.parentObject = document.getElementById('canvas3');
             config3.type = "gaylussac";
@@ -51,9 +54,9 @@
             var config4 = {};
             config4.startPressure = 1.0;
             config4.maxPressure = 2.0;
-            config4.startVolume = 22.0;
+            config4.startVolume = 22.4;
             config4.volMaxLiter = 40.0;            
-            config4.startTemperature = 303.15;
+            config4.startTemperature = 273;
             config4.tempMaxK = 400;
             config4.parentObject = document.getElementById('canvas4');
             config4.moleSliderId = "#moleNumber4";
@@ -65,9 +68,9 @@
             var configCombo = {};
             configCombo.startPressure = 1.0;
             configCombo.maxPressure = 3.0;
-            configCombo.startVolume = 22.0;
+            configCombo.startVolume = 22.4;
             configCombo.volMaxLiter = 40.0;
-            configCombo.startTemperature = 303.15;
+            configCombo.startTemperature = 273;
             configCombo.tempMaxK = 400;
             configCombo.parentObject = document.getElementById('canvasCombo');
             configCombo.type = "combo";
@@ -76,10 +79,10 @@
             var wtIdeal = new wholeThing();
             var configIdeal = {};
             configIdeal.startPressure = 1.0;
-            configIdeal.maxPressure = 4.0;
-            configIdeal.startVolume = 22.0;
+            configIdeal.maxPressure = 7.0;
+            configIdeal.startVolume = 22.4;
             configIdeal.volMaxLiter = 40.0;
-            configIdeal.startTemperature = 303.15;
+            configIdeal.startTemperature = 273;
             configIdeal.tempMaxK = 400;
             configIdeal.parentObject = document.getElementById('canvasIdeal');
             configIdeal.moleSliderId = "#moleNumberIdeal";
@@ -101,6 +104,28 @@
                 <canvas id="canvas1" width="300" height="219" class="backgroundItem">
                     This text is displayed if your browser does not support HTML5 Canvas.
                 </canvas>
+                <div style="position:absolute; bottom:25px; text-align:center; width:300px">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <mi>P</mi><mo>&#x221D;</mo>
+                        <mfrac>
+                            <mrow>
+                                <mn>1</mn>
+                            </mrow>
+                            <mrow>
+                                <mi>V</mi>
+                            </mrow>
+                        </mfrac>
+                    </math>
+                    <br />
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <mi>P</mi><mi>V</mi><mo>=</mo><mi>k</mi>
+                    </math>
+                    <br />
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <msub><mi>P</mi><mn>1</mn></msub><msub><mi>V</mi><mn>1</mn></msub><mo>=</mo><msub><mi>P</mi><mn>2</mn></msub><msub><mi>V</mi><mn>2</mn></msub>
+                    </math>
+                </div>
+ 
             </div>
             <div class="container">
                 <span style="display :block; font-size:14pt; font-weight:bold">Charles' Law</span>
@@ -109,6 +134,44 @@
                 <canvas id="canvas2" width="300" height="219" class="backgroundItem">
                     This text is displayed if your browser does not support HTML5 Canvas.
                 </canvas>
+                <div style="position:absolute; bottom:25px; text-align:center; width:300px">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <mi>V</mi><mo>&#x221D;</mo><mi>T</mi>
+                    </math>
+                    <br />
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <mfrac>
+                            <mrow>
+                                <mi>V</mi>
+                            </mrow>
+                            <mrow>
+                                <mi>T</mi>
+                            </mrow>
+                        </mfrac>
+                        <mo>=</mo><mi>k</mi>
+                    </math>
+                    <br />
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <mfrac>
+                            <mrow>
+                                <msub><mi>V</mi><mn>1</mn></msub>
+                            </mrow>
+                            <mrow>
+                                <msub><mi>T</mi><mn>1</mn></msub>
+                            </mrow>
+                        </mfrac>
+                        <mo>=</mo>
+                        <mfrac>
+                            <mrow>
+                                <msub><mi>V</mi><mn>2</mn></msub>
+                            </mrow>
+                            <mrow>
+                                <msub><mi>T</mi><mn>2</mn></msub>
+                            </mrow>
+                        </mfrac>
+                    </math>
+                </div>
+
             </div>
             <div  class="container">
                 <span style="font-size:14pt; font-weight:bold; display :block; ">Gay-Lussac's Law</span>
@@ -117,6 +180,44 @@
                 <canvas id="canvas3" width="300" height="219" class="backgroundItem">
                     This text is displayed if your browser does not support HTML5 Canvas.
                 </canvas>
+                <div style="position:absolute; bottom:25px; text-align:center; width:300px">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <mi>P</mi><mo>&#x221D;</mo><mi>T</mi>
+                    </math>
+                    <br />
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <mfrac>
+                            <mrow>
+                                <mi>P</mi>
+                            </mrow>
+                            <mrow>
+                                <mi>T</mi>
+                            </mrow>
+                        </mfrac>
+                        <mo>=</mo><mi>k</mi>
+                    </math>
+                    <br />
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <mfrac>
+                            <mrow>
+                                <msub><mi>P</mi><mn>1</mn></msub>
+                            </mrow>
+                            <mrow>
+                                <msub><mi>T</mi><mn>1</mn></msub>
+                            </mrow>
+                        </mfrac>
+                        <mo>=</mo>
+                        <mfrac>
+                            <mrow>
+                                <msub><mi>P</mi><mn>2</mn></msub>
+                            </mrow>
+                            <mrow>
+                                <msub><mi>T</mi><mn>2</mn></msub>
+                            </mrow>
+                        </mfrac>
+                    </math>
+                </div>
+
             </div>
             <div class="container">
                 <span style="font-size:14pt; font-weight:bold; display :block; ">Combined Gas Law</span>
@@ -125,6 +226,43 @@
                 <canvas id="canvasCombo" width="300" height="219" class="backgroundItem">
                     This text is displayed if your browser does not support HTML5 Canvas.
                 </canvas>
+                <div style="position:absolute; bottom:25px; text-align:center; width:300px">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <mfrac>
+                            <mrow>
+                                <mi>P</mi>
+                                <mi>V</mi>
+                            </mrow>
+                            <mrow>
+                                <mi>T</mi>
+                            </mrow>
+                        </mfrac>
+                        <mo>=</mo><mi>k</mi>
+                    </math>
+                    <br />
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <mfrac>
+                            <mrow>
+                                <msub><mi>P</mi><mn>1</mn></msub>
+                                <msub><mi>V</mi><mn>1</mn></msub>
+                            </mrow>
+                            <mrow>
+                                <msub><mi>T</mi><mn>1</mn></msub>
+                            </mrow>
+                        </mfrac>
+                        <mo>=</mo>
+                        <mfrac>
+                            <mrow>
+                                <msub><mi>P</mi><mn>2</mn></msub>
+                                <msub><mi>V</mi><mn>2</mn></msub>
+                            </mrow>
+                            <mrow>
+                                <msub><mi>T</mi><mn>2</mn></msub>
+                            </mrow>
+                        </mfrac>
+                    </math>
+                </div>
+
             </div>
             <div class="container">
                 <span style="font-size:14pt; font-weight:bold">Avagadro's Law</span>

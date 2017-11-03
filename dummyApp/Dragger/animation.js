@@ -444,9 +444,10 @@
     }
 
     function idealGasEquation(myState) {
-        var _R = 8.314;
+        var _R = 0.082057;
+        //var _R = 8.314;
         var _mol = $(myState.moleSliderId).val();
-        var p = parseFloat(_mol) * _R * myState.temperature / (myState.volume * 100);
+        var p = parseFloat(_mol) * _R * myState.temperature / (myState.volume);
         return p;
     }
   
