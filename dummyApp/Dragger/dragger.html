@@ -98,7 +98,7 @@
         <div>
             <br /><br />
             <div  class="container">
-                <span style="display :block;font-size:14pt; font-weight:bold">Boyle's Law</span>
+                <span class="title">Boyle's Law</span>
                 <image src="image/volume.png" style="width:300px;" class="backgroundItem">
                 </image>
                 <canvas id="canvas1" width="300" height="219" class="backgroundItem">
@@ -128,7 +128,7 @@
  
             </div>
             <div class="container">
-                <span style="display :block; font-size:14pt; font-weight:bold">Charles' Law</span>
+                <span class="title">Charles' Law</span>
                 <image src="image/volume.png" style="width:300px;" class="backgroundItem">
                 </image>
                 <canvas id="canvas2" width="300" height="219" class="backgroundItem">
@@ -174,7 +174,7 @@
 
             </div>
             <div  class="container">
-                <span style="font-size:14pt; font-weight:bold; display :block; ">Gay-Lussac's Law</span>
+                <span  class="title">Gay-Lussac's Law</span>
                 <image src="image/volume.png" style="width:300px;" class="backgroundItem">
                 </image>
                 <canvas id="canvas3" width="300" height="219" class="backgroundItem">
@@ -220,7 +220,7 @@
 
             </div>
             <div class="container">
-                <span style="font-size:14pt; font-weight:bold; display :block; ">Combined Gas Law</span>
+                <span class="title">Combined Gas Law</span>
                 <image src="image/volume.png" style="width:300px;" class="backgroundItem">
                 </image>
                 <canvas id="canvasCombo" width="300" height="219" class="backgroundItem">
@@ -264,35 +264,79 @@
                 </div>
 
             </div>
-            <div class="container">
-                <span style="font-size:14pt; font-weight:bold">Avagadro's Law</span>
+            <div class="container" style="height:410px;">
+                <span class="title">Avagadro's Law</span>
                 <image src="image/volume.png" style="width:300px;" class="backgroundItem">
                 </image>
                 <canvas id="canvas4" width="300" height="219" class="backgroundItem">
                     This text is displayed if your browser does not support HTML5 Canvas.
                 </canvas>
-                <div style="position: absolute;bottom: 30px;left: 0;font-size:12px; width:310px; text-align:center">
+                <div style="position: absolute;bottom: 95px;left: 0;font-size:12px; width:310px; text-align:center">
                     <div style="display:block">
                         <b>NUMBER OF MOLES</b>
                         <label id="lblMoleNumber4">1.0</label>
                     </div>
                     <input id="moleNumber4" type="range" min="0.1" max="2" value="1" step="0.1" >
                 </div>
+
+                <div style="position:absolute; bottom:20px; text-align:center; width:300px">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <mi>P</mi><mo>&#x221D;</mo><mi>n</mi>
+                    </math>
+                    <br />
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <mfrac>
+                            <mrow>
+                                <mi>P</mi>
+                            </mrow>
+                            <mrow>
+                                <mi>n</mi>
+                            </mrow>
+                        </mfrac>
+                        <mo>=</mo><mi>k</mi>
+                    </math>
+                    <br />
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <mfrac>
+                            <mrow>
+                                <msub><mi>P</mi><mn>1</mn></msub>
+                            </mrow>
+                            <mrow>
+                                <msub><mi>n</mi><mn>1</mn></msub>
+                            </mrow>
+                        </mfrac>
+                        <mo>=</mo>
+                        <mfrac>
+                            <mrow>
+                                <msub><mi>P</mi><mn>2</mn></msub>
+                            </mrow>
+                            <mrow>
+                                <msub><mi>n</mi><mn>2</mn></msub>
+                            </mrow>
+                        </mfrac>
+                    </math>
+                </div>
             </div>
-            <div class="container">
-                <span style="font-size:14pt; font-weight:bold">Ideal Gas Law</span>
+            <div class="container" style="height:410px;">
+                <span class="title">Ideal Gas Law</span>
                 <image src="image/volume.png" style="width:300px;" class="backgroundItem">
                 </image>
                 <canvas id="canvasIdeal" width="300" height="219" class="backgroundItem">
                     This text is displayed if your browser does not support HTML5 Canvas.
                 </canvas>
-                <div style="position: absolute;bottom: 30px;left: 0;font-size:12px; width:310px; text-align:center">
+                <div style="position: absolute;bottom: 95px;left: 0;font-size:12px; width:310px; text-align:center">
                     <div style="display:block">
                         <b>NUMBER OF MOLES</b>
                         <label id="lblMoleNumberIdeal">1.0</label>
                     </div>
                     <input id="moleNumberIdeal" type="range" min="0.1" max="2" value="1" step="0.1">
                 </div>
+                <div style="position:absolute; bottom:60px; text-align:center; width:300px">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <mi>P</mi><mi>V</mi><mo>=</mo><mi>n</mi><mi>R</mi><mi>T</mi>
+                    </math>
+                </div>
+
             </div>
 
         </div>

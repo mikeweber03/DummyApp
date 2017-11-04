@@ -1,13 +1,23 @@
 ﻿.backgroundItem{
     position:absolute; 
     top:40px;
-    left:0px;
+    left:1px;
 }
 .container{
     position:relative; 
     display :inline-block; 
     height:360px;
-    width:310px
+    width:310px;
+    border: 1px solid #999999;
+    -webkit-border-radius:10px;
+    -moz-border-radius:10px;
+    -border-radius:10px;
+}
+
+.title {
+  font-size:14pt; 
+  font-weight:bold;
+  padding:5px;
 }
 
 
